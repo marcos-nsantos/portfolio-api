@@ -21,3 +21,7 @@ type Repository interface {
 	Writer
 	Reader
 }
+
+type Service interface {
+	Create(ctx context.Context, project *entity.Project) error
+}
