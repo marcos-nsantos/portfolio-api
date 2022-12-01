@@ -12,6 +12,7 @@ type Writer interface {
 
 type Reader interface {
 	FindAll(ctx context.Context) ([]*entity.Project, error)
+	FindByID(ctx context.Context, id uint) (*entity.Project, error)
 }
 
 type Repository interface {

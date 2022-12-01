@@ -28,3 +28,12 @@ func (r *Repo) FindAll(ctx context.Context) ([]*entity.Project, error) {
 		Order("id desc").Error
 	return projects, err
 }
+
+func (r *Repo) FindByID(ctx context.Context, id uint) (*entity.Project, error) {
+	var project entity.Project
+	err := r.db.WithContext(ctx).
+		Model(&entity.Project{}).
+		Select("id", "name", "description", "url", "created_at", "updated_at").
+		First(&project, id).Error
+	return &project, err
+}
