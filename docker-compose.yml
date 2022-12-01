@@ -4,16 +4,16 @@ services:
   database:
     image: postgres:14-alpine
     container_name: database
-    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: portfolio
+    ports:
+      - "5432:5432"
 
   api:
     build: .
     container_name: api
-    restart: always
     ports:
       - "8080:8080"
     environment:
