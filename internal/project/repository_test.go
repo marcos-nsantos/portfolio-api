@@ -3,8 +3,8 @@
 package project
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"os"
 	"testing"
 
@@ -23,7 +23,7 @@ func TestMain(m *testing.M) {
 	}
 	db = conn.DB
 	if err := conn.CreateTables(); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	code := m.Run()
 	os.Exit(code)
@@ -35,9 +35,17 @@ func TestInsert(t *testing.T) {
 		Description: "Test",
 		URL:         "https://github.com/marcos-nsantos/test",
 	}
-	err := db.Create(project).Error
+	repo := NewRepo(db)
+	err := repo.Insert(context.Background(), project)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, project.ID)
 	assert.NotEmpty(t, project.CreatedAt)
 	assert.NotEmpty(t, project.UpdatedAt)
+}
+
+func TestFindAll(t *testing.T) {
+	repo := NewRepo(db)
+	projects, err := repo.FindAll(context.Background())
+	assert.NoError(t, err)
+	assert.NotEmpty(t, projects)
 }

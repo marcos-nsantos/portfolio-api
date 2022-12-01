@@ -18,3 +18,13 @@ func NewRepo(db *gorm.DB) *Repo {
 func (r *Repo) Insert(ctx context.Context, project *entity.Project) error {
 	return r.db.WithContext(ctx).Create(project).Error
 }
+
+func (r *Repo) FindAll(ctx context.Context) ([]*entity.Project, error) {
+	var projects []*entity.Project
+	err := r.db.WithContext(ctx).
+		Model(&entity.Project{}).
+		Select("id", "name", "description", "url", "created_at", "updated_at").
+		Find(&projects).
+		Order("id desc").Error
+	return projects, err
+}

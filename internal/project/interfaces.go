@@ -10,7 +10,9 @@ type Writer interface {
 	Insert(ctx context.Context, project *entity.Project) error
 }
 
-type Reader interface{}
+type Reader interface {
+	FindAll(ctx context.Context) ([]*entity.Project, error)
+}
 
 type Repository interface {
 	Writer
