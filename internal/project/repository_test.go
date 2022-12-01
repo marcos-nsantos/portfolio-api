@@ -61,3 +61,12 @@ func TestFindByID(t *testing.T) {
 	assert.NotEmpty(t, project.CreatedAt)
 	assert.NotEmpty(t, project.UpdatedAt)
 }
+
+func TestUpdate(t *testing.T) {
+	repo := NewRepo(db)
+	project, err := repo.FindByID(context.Background(), 1)
+	assert.NoError(t, err)
+	project.Name = "Test Updated"
+	err = repo.Update(context.Background(), project)
+	assert.NoError(t, err)
+}

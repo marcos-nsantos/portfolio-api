@@ -37,3 +37,7 @@ func (r *Repo) FindByID(ctx context.Context, id uint) (*entity.Project, error) {
 		First(&project, id).Error
 	return &project, err
 }
+
+func (r *Repo) Update(ctx context.Context, project *entity.Project) error {
+	return r.db.WithContext(ctx).Save(project).Error
+}
