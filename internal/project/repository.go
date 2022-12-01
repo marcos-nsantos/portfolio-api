@@ -41,3 +41,7 @@ func (r *Repo) FindByID(ctx context.Context, id uint) (*entity.Project, error) {
 func (r *Repo) Update(ctx context.Context, project *entity.Project) error {
 	return r.db.WithContext(ctx).Save(project).Error
 }
+
+func (r *Repo) Delete(ctx context.Context, id uint) error {
+	return r.db.WithContext(ctx).Delete(&entity.Project{}, id).Error
+}

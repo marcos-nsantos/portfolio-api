@@ -9,6 +9,7 @@ import (
 type Writer interface {
 	Insert(ctx context.Context, project *entity.Project) error
 	Update(ctx context.Context, project *entity.Project) error
+	Delete(ctx context.Context, id uint) error
 }
 
 type Reader interface {

@@ -70,3 +70,9 @@ func TestUpdate(t *testing.T) {
 	err = repo.Update(context.Background(), project)
 	assert.NoError(t, err)
 }
+
+func TestDelete(t *testing.T) {
+	repo := NewRepo(db)
+	err := repo.Delete(context.Background(), 1)
+	assert.NoError(t, err)
+}
