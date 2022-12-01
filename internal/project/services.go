@@ -17,3 +17,7 @@ func NewServices(repo Repository) *Services {
 func (s *Services) Create(ctx context.Context, project *entity.Project) error {
 	return s.repo.Insert(ctx, project)
 }
+
+func (s *Services) GetByID(ctx context.Context, id uint) (*entity.Project, error) {
+	return s.repo.FindByID(ctx, id)
+}

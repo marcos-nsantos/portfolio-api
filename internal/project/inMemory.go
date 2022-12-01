@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/marcos-nsantos/portfolio-api/internal/entity"
+	"gorm.io/gorm"
 )
 
 type inMemory struct {
@@ -25,14 +26,13 @@ func (i *inMemory) Insert(ctx context.Context, project *entity.Project) error {
 	return nil
 }
 
-func (i *inMemory) Update(ctx context.Context, project *entity.Project) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (i *inMemory) Delete(ctx context.Context, id uint) error {
-	//TODO implement me
-	panic("implement me")
+func (i *inMemory) FindByID(ctx context.Context, id uint) (*entity.Project, error) {
+	for _, project := range i.projects {
+		if project.ID == id {
+			return project, nil
+		}
+	}
+	return nil, gorm.ErrRecordNotFound
 }
 
 func (i *inMemory) FindAll(ctx context.Context) ([]*entity.Project, error) {
@@ -40,7 +40,12 @@ func (i *inMemory) FindAll(ctx context.Context) ([]*entity.Project, error) {
 	panic("implement me")
 }
 
-func (i *inMemory) FindByID(ctx context.Context, id uint) (*entity.Project, error) {
+func (i *inMemory) Update(ctx context.Context, project *entity.Project) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (i *inMemory) Delete(ctx context.Context, id uint) error {
 	//TODO implement me
 	panic("implement me")
 }

@@ -24,4 +24,5 @@ type Repository interface {
 
 type Service interface {
 	Create(ctx context.Context, project *entity.Project) error
+	GetByID(ctx context.Context, id uint) (*entity.Project, error)
 }
