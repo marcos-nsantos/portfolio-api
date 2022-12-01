@@ -40,3 +40,14 @@ func TestGetByID(t *testing.T) {
 	assert.False(t, project.CreatedAt.IsZero())
 	assert.False(t, project.UpdatedAt.IsZero())
 }
+
+func TestGetAll(t *testing.T) {
+	repo := newInMemory()
+	services := NewServices(repo)
+	project := newFixture()
+	err := services.Create(context.Background(), project)
+	assert.NoError(t, err)
+	projects, err := services.GetAll(context.Background())
+	assert.NoError(t, err)
+	assert.Len(t, projects, 1)
+}

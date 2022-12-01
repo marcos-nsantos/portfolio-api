@@ -36,8 +36,7 @@ func (i *inMemory) FindByID(ctx context.Context, id uint) (*entity.Project, erro
 }
 
 func (i *inMemory) FindAll(ctx context.Context) ([]*entity.Project, error) {
-	//TODO implement me
-	panic("implement me")
+	return i.projects, nil
 }
 
 func (i *inMemory) Update(ctx context.Context, project *entity.Project) error {
