@@ -1,0 +1,34 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  build:
+    cmds:
+      - go build -o app cmd/server/main.go
+
+  test:
+    cmds:
+      - go test -v ./...
+
+  run:
+    cmds:
+      - docker-compose up --build -d
+
+  stop:
+    cmds:
+      - docker-compose down
+
+  integration-test:
+    cmds:
+      - docker-compose up -d database
+      - go test -tags=integration -v ./...
+      - docker-compose down
+    env:
+      DATABASE_URL: "host=localhost user=postgres password=postgres dbname=portfolio port=5432 sslmode=disable"
+
+  acceptance-test:
+    cmds:
+      - docker-compose up -d --build
+      - go test -tags=e2e -v ./...
+      - docker-compose down
