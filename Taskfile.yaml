@@ -9,7 +9,7 @@ tasks:
 
   test:
     cmds:
-      - go test -v ./...
+      - go test -tags=unit -v ./...
 
   run:
     cmds:
