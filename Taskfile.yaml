@@ -27,8 +27,10 @@ tasks:
     env:
       DATABASE_URL: "host=localhost user=postgres password=postgres dbname=portfolio port=5432 sslmode=disable"
 
-  acceptance-test:
+  e2e-test:
     cmds:
-      - docker-compose up -d --build
+      - docker-compose up -d database
       - go test -tags=e2e -v ./...
       - docker-compose down
+    env:
+      DATABASE_URL: "host=localhost user=postgres password=postgres dbname=portfolio port=5432 sslmode=disable"
