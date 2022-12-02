@@ -40,8 +40,13 @@ func (i *inMemory) FindAll(ctx context.Context) ([]*entity.Project, error) {
 }
 
 func (i *inMemory) Update(ctx context.Context, project *entity.Project) error {
-	//TODO implement me
-	panic("implement me")
+	for index, p := range i.projects {
+		if p.ID == project.ID {
+			i.projects[index] = project
+			return nil
+		}
+	}
+	return gorm.ErrRecordNotFound
 }
 
 func (i *inMemory) Delete(ctx context.Context, id uint) error {

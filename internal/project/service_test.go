@@ -51,3 +51,17 @@ func TestGetAll(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Len(t, projects, 1)
 }
+
+func TestUpdate(t *testing.T) {
+	repo := newInMemory()
+	services := NewServices(repo)
+	project := newFixture()
+	err := services.Create(context.Background(), project)
+	assert.NoError(t, err)
+	project.Name = "New Name"
+	err = services.Update(context.Background(), project)
+	assert.NoError(t, err)
+	project, err = services.GetByID(context.Background(), project.ID)
+	assert.NoError(t, err)
+	assert.Equal(t, "New Name", project.Name)
+}

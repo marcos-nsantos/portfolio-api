@@ -25,3 +25,10 @@ func (s *Services) GetByID(ctx context.Context, id uint) (*entity.Project, error
 func (s *Services) GetAll(ctx context.Context) ([]*entity.Project, error) {
 	return s.repo.FindAll(ctx)
 }
+
+func (s *Services) Update(ctx context.Context, project *entity.Project) error {
+	if _, err := s.GetByID(ctx, project.ID); err != nil {
+		return err
+	}
+	return s.repo.Update(ctx, project)
+}
