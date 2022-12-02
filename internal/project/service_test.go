@@ -65,3 +65,16 @@ func TestUpdate(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, "New Name", project.Name)
 }
+
+func TestDelete(t *testing.T) {
+	repo := newInMemory()
+	services := NewServices(repo)
+	project := newFixture()
+	err := services.Create(context.Background(), project)
+	assert.NoError(t, err)
+	err = services.Delete(context.Background(), project.ID)
+	assert.NoError(t, err)
+	projects, err := services.GetByID(context.Background(), project.ID)
+	assert.Error(t, err)
+	assert.Nil(t, projects)
+}

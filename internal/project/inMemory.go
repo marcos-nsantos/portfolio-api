@@ -46,12 +46,17 @@ func (i *inMemory) Update(ctx context.Context, project *entity.Project) error {
 			return nil
 		}
 	}
-	return gorm.ErrRecordNotFound
+	return nil
 }
 
 func (i *inMemory) Delete(ctx context.Context, id uint) error {
-	//TODO implement me
-	panic("implement me")
+	for index, project := range i.projects {
+		if project.ID == id {
+			i.projects = append(i.projects[:index], i.projects[index+1:]...)
+			return nil
+		}
+	}
+	return nil
 }
 
 func (i *inMemory) generateID() uint {
