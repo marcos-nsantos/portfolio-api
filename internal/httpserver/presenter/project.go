@@ -17,3 +17,11 @@ func NewProjectPresenter(project *entity.Project) *ProjectPresenter {
 		URL:         project.URL,
 	}
 }
+
+func NewProjectsPresenter(projects []*entity.Project) []*ProjectPresenter {
+	var projectPresenters []*ProjectPresenter
+	for _, project := range projects {
+		projectPresenters = append(projectPresenters, NewProjectPresenter(project))
+	}
+	return projectPresenters
+}

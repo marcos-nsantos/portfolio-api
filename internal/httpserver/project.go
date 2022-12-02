@@ -71,3 +71,14 @@ func (s *Server) getProject(w http.ResponseWriter, r *http.Request) {
 	projectPresenter := presenter.NewProjectPresenter(project)
 	presenter.JSONResponse(w, http.StatusOK, projectPresenter)
 }
+
+func (s *Server) getAllProjects(w http.ResponseWriter, r *http.Request) {
+	projects, err := s.Project.GetAll(r.Context())
+	if err != nil {
+		presenter.JSONInternalServerError(w, err)
+		return
+	}
+
+	projectsPresenter := presenter.NewProjectsPresenter(projects)
+	presenter.JSONResponse(w, http.StatusOK, projectsPresenter)
+}
