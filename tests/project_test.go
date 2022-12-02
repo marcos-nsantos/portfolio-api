@@ -40,3 +40,10 @@ func TestCreate(t *testing.T) {
 	response := executeRequest(req, s)
 	checkResponseCode(t, http.StatusCreated, response.Code)
 }
+
+func TestGetProject(t *testing.T) {
+	req, err := http.NewRequest(http.MethodGet, "/projects/1", nil)
+	assert.NoError(t, err)
+	response := executeRequest(req, s)
+	checkResponseCode(t, http.StatusOK, response.Code)
+}

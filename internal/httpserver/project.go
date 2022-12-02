@@ -2,11 +2,16 @@ package httpserver
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
+	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/marcos-nsantos/portfolio-api/internal/entity"
+	"github.com/marcos-nsantos/portfolio-api/internal/errs"
 	"github.com/marcos-nsantos/portfolio-api/internal/httpserver/presenter"
 	"github.com/marcos-nsantos/portfolio-api/internal/validator"
+	"gorm.io/gorm"
 )
 
 type ProjectRequest struct {
@@ -26,7 +31,7 @@ func (p *ProjectRequest) ToEntity() *entity.Project {
 func (s *Server) createProject(w http.ResponseWriter, r *http.Request) {
 	var request ProjectRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
-		presenter.JSONErrorResponse(w, http.StatusBadRequest, err)
+		presenter.JSONErrorResponse(w, http.StatusBadRequest, errs.ErrInvalidBodyRequest)
 		return
 	}
 
@@ -43,4 +48,26 @@ func (s *Server) createProject(w http.ResponseWriter, r *http.Request) {
 
 	projectPresenter := presenter.NewProjectPresenter(toEntity)
 	presenter.JSONResponse(w, http.StatusCreated, projectPresenter)
+}
+
+func (s *Server) getProject(w http.ResponseWriter, r *http.Request) {
+	idParam := chi.URLParam(r, "id")
+	idUint, err := strconv.ParseUint(idParam, 10, 64)
+	if err != nil {
+		presenter.JSONErrorResponse(w, http.StatusBadRequest, errs.ErrInvalidID)
+		return
+	}
+
+	project, err := s.Project.GetByID(r.Context(), uint(idUint))
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			presenter.JSONErrorResponse(w, http.StatusNotFound, err)
+			return
+		}
+		presenter.JSONInternalServerError(w, err)
+		return
+	}
+
+	projectPresenter := presenter.NewProjectPresenter(project)
+	presenter.JSONResponse(w, http.StatusOK, projectPresenter)
 }
