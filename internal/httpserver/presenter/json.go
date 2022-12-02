@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/marcos-nsantos/portfolio-api/internal/errs"
 )
 
 func JSONInternalServerError(w http.ResponseWriter, err error) {
 	log.Println(err)
 	w.WriteHeader(http.StatusInternalServerError)
-	w.Write([]byte("An error occurred internally"))
+	w.Write([]byte(errs.ErrInternalServerError.Error()))
 }
 
 func JSONResponse(w http.ResponseWriter, statusCode int, data any) {
