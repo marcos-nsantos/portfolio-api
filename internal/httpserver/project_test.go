@@ -74,3 +74,13 @@ func TestUpdateProject(t *testing.T) {
 	response := executeRequest(req, s)
 	checkResponseCode(t, http.StatusOK, response.Code)
 }
+
+func TestDeleteProject(t *testing.T) {
+	s := CreateNewServer(db)
+	s.MountHandlers()
+
+	req, err := http.NewRequest(http.MethodDelete, "/projects/1", nil)
+	assert.NoError(t, err)
+	response := executeRequest(req, s)
+	checkResponseCode(t, http.StatusNoContent, response.Code)
+}

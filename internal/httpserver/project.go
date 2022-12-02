@@ -116,3 +116,23 @@ func (s *Server) updateProject(w http.ResponseWriter, r *http.Request) {
 	projectPresenter := presenter.NewProjectPresenter(toEntity)
 	presenter.JSONResponse(w, http.StatusOK, projectPresenter)
 }
+
+func (s *Server) deleteProject(w http.ResponseWriter, r *http.Request) {
+	idParam := chi.URLParam(r, "id")
+	idUint, err := strconv.ParseUint(idParam, 10, 64)
+	if err != nil {
+		presenter.JSONErrorResponse(w, http.StatusBadRequest, errs.ErrInvalidID)
+		return
+	}
+
+	if err := s.Project.Delete(r.Context(), uint(idUint)); err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			presenter.JSONErrorResponse(w, http.StatusNotFound, err)
+			return
+		}
+		presenter.JSONInternalServerError(w, err)
+		return
+	}
+
+	presenter.JSONResponse(w, http.StatusNoContent, nil)
+}
