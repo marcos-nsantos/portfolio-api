@@ -42,4 +42,5 @@ func (s *Server) MountHandlers() {
 	s.Router.Post("/projects", s.createProject)
 	s.Router.Get("/projects/{id}", s.getProject)
 	s.Router.Get("/projects", s.getAllProjects)
+	s.Router.Put("/projects/{id}", s.updateProject)
 }

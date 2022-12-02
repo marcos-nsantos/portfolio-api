@@ -54,3 +54,11 @@ func TestGetProjects(t *testing.T) {
 	response := executeRequest(req, s)
 	checkResponseCode(t, http.StatusOK, response.Code)
 }
+
+func TestUpdateProject(t *testing.T) {
+	body := []byte(`{"name":"test","description":"test","url":"https://github.com/marcos-nsantos/portfolio-api-rest"}`)
+	req, err := http.NewRequest(http.MethodPut, "/projects/1", bytes.NewBuffer(body))
+	assert.NoError(t, err)
+	response := executeRequest(req, s)
+	checkResponseCode(t, http.StatusOK, response.Code)
+}

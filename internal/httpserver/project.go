@@ -35,8 +35,8 @@ func (s *Server) createProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if ok, errors := validator.Validate(request); !ok {
-		presenter.JSONValidationResponse(w, errors)
+	if ok, validationErrors := validator.Validate(request); !ok {
+		presenter.JSONValidationResponse(w, validationErrors)
 		return
 	}
 
@@ -81,4 +81,38 @@ func (s *Server) getAllProjects(w http.ResponseWriter, r *http.Request) {
 
 	projectsPresenter := presenter.NewProjectsPresenter(projects)
 	presenter.JSONResponse(w, http.StatusOK, projectsPresenter)
+}
+
+func (s *Server) updateProject(w http.ResponseWriter, r *http.Request) {
+	idParam := chi.URLParam(r, "id")
+	idUint, err := strconv.ParseUint(idParam, 10, 64)
+	if err != nil {
+		presenter.JSONErrorResponse(w, http.StatusBadRequest, errs.ErrInvalidID)
+		return
+	}
+
+	var request ProjectRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		presenter.JSONErrorResponse(w, http.StatusBadRequest, errs.ErrInvalidBodyRequest)
+		return
+	}
+
+	if ok, validationErrors := validator.Validate(request); !ok {
+		presenter.JSONValidationResponse(w, validationErrors)
+		return
+	}
+
+	toEntity := request.ToEntity()
+	toEntity.ID = uint(idUint)
+	if err := s.Project.Update(r.Context(), toEntity); err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			presenter.JSONErrorResponse(w, http.StatusNotFound, err)
+			return
+		}
+		presenter.JSONInternalServerError(w, err)
+		return
+	}
+
+	projectPresenter := presenter.NewProjectPresenter(toEntity)
+	presenter.JSONResponse(w, http.StatusOK, projectPresenter)
 }
