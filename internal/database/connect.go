@@ -10,7 +10,7 @@ import (
 )
 
 type Connection struct {
-	DB *gorm.DB
+	Client *gorm.DB
 }
 
 func New() (*Connection, error) {
@@ -23,7 +23,7 @@ func New() (*Connection, error) {
 			counts++
 		} else {
 			log.Println("Connected to Postgres!")
-			return &Connection{DB: connection}, nil
+			return &Connection{Client: connection}, nil
 		}
 
 		if counts > 10 {

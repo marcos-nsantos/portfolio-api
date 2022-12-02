@@ -21,7 +21,7 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	db = conn.DB
+	db = conn.Client
 	if err := conn.CreateTables(); err != nil {
 		fmt.Println(err)
 	}
