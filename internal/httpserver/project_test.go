@@ -4,6 +4,9 @@ package httpserver
 
 import (
 	"bytes"
+	"context"
+	"github.com/marcos-nsantos/portfolio-api/internal/entity"
+	"github.com/marcos-nsantos/portfolio-api/internal/user"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -32,14 +35,29 @@ func TestMain(t *testing.M) {
 	client.CreateTables()
 	db = client.Client
 	code := t.Run()
+	client.DropTables()
 	os.Exit(code)
+}
+
+func createUser(db *gorm.DB) error {
+	userService := user.NewServices(user.NewRepo(db))
+	u := &entity.User{
+		FirstName: "Marcos",
+		LastName:  "Santos",
+		Email:     "email@email.com",
+		Password:  "password",
+	}
+	return userService.Create(context.Background(), u)
 }
 
 func TestCreate(t *testing.T) {
 	s := CreateNewServer(db)
 	s.MountHandlers()
 
-	body := []byte(`{"name":"test","description":"test","url":"https://github.com/marcos-nsantos/portfolio-api"}`)
+	err := createUser(db)
+	assert.NoError(t, err)
+
+	body := []byte(`{"name":"test","description":"test","url":"https://github.com/marcos-nsantos/portfolio-api", "user_id": 1}`)
 	req, err := http.NewRequest(http.MethodPost, "/projects", bytes.NewBuffer(body))
 	assert.NoError(t, err)
 	response := executeRequest(req, s)
