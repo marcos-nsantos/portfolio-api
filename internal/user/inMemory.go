@@ -36,8 +36,7 @@ func (i *inMemory) Delete(ctx context.Context, id uint64) error {
 }
 
 func (i *inMemory) FindAll(ctx context.Context) ([]*entity.User, error) {
-	//TODO implement me
-	panic("implement me")
+	return i.users, nil
 }
 
 func (i *inMemory) FindByID(ctx context.Context, id uint64) (*entity.User, error) {

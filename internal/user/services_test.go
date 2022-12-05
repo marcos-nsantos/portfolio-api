@@ -39,3 +39,14 @@ func TestGetByID(t *testing.T) {
 	assert.Equal(t, "Santos", user.LastName)
 	assert.Equal(t, "email@email.com", user.Email)
 }
+
+func TestGetAll(t *testing.T) {
+	repo := newInMemory()
+	services := NewServices(repo)
+	user := newFixture()
+	err := services.Create(context.Background(), user)
+	assert.NoError(t, err)
+	users, err := services.GetAll(context.Background())
+	assert.NoError(t, err)
+	assert.Len(t, users, 1)
+}

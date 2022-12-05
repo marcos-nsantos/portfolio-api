@@ -20,3 +20,7 @@ func (s *Services) Create(ctx context.Context, user *entity.User) error {
 func (s *Services) GetByID(ctx context.Context, id uint64) (*entity.User, error) {
 	return s.repo.FindByID(ctx, id)
 }
+
+func (s *Services) GetAll(ctx context.Context) ([]*entity.User, error) {
+	return s.repo.FindAll(ctx)
+}
