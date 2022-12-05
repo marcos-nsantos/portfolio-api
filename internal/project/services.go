@@ -18,7 +18,7 @@ func (s *Services) Create(ctx context.Context, project *entity.Project) error {
 	return s.repo.Insert(ctx, project)
 }
 
-func (s *Services) GetByID(ctx context.Context, id uint) (*entity.Project, error) {
+func (s *Services) GetByID(ctx context.Context, id uint64) (*entity.Project, error) {
 	return s.repo.FindByID(ctx, id)
 }
 
@@ -33,7 +33,7 @@ func (s *Services) Update(ctx context.Context, project *entity.Project) error {
 	return s.repo.Update(ctx, project)
 }
 
-func (s *Services) Delete(ctx context.Context, id uint) error {
+func (s *Services) Delete(ctx context.Context, id uint64) error {
 	if _, err := s.GetByID(ctx, id); err != nil {
 		return err
 	}

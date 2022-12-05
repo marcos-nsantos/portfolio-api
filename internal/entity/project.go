@@ -7,7 +7,7 @@ import (
 )
 
 type Project struct {
-	ID          uint   `gorm:"primaryKey"`
+	ID          uint64 `gorm:"primaryKey"`
 	Name        string `gorm:"type:varchar(100);not null"`
 	Description string `gorm:"type:varchar(255);not null"`
 	URL         string `gorm:"type:varchar(255);not null"`

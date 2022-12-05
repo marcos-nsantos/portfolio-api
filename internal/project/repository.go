@@ -29,7 +29,7 @@ func (r *Repo) FindAll(ctx context.Context) ([]*entity.Project, error) {
 	return projects, err
 }
 
-func (r *Repo) FindByID(ctx context.Context, id uint) (*entity.Project, error) {
+func (r *Repo) FindByID(ctx context.Context, id uint64) (*entity.Project, error) {
 	var project entity.Project
 	err := r.db.WithContext(ctx).
 		Model(&entity.Project{}).
@@ -42,6 +42,6 @@ func (r *Repo) Update(ctx context.Context, project *entity.Project) error {
 	return r.db.WithContext(ctx).Save(project).Error
 }
 
-func (r *Repo) Delete(ctx context.Context, id uint) error {
+func (r *Repo) Delete(ctx context.Context, id uint64) error {
 	return r.db.WithContext(ctx).Delete(&entity.Project{}, id).Error
 }

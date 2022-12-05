@@ -57,7 +57,7 @@ func TestFindByID(t *testing.T) {
 	repo := NewRepo(db)
 	project, err := repo.FindByID(context.Background(), 1)
 	assert.NoError(t, err)
-	assert.Equal(t, uint(1), project.ID)
+	assert.Equal(t, uint64(1), project.ID)
 	assert.Equal(t, "Test", project.Name)
 	assert.Equal(t, "Test", project.Description)
 	assert.Equal(t, "https://github.com/marcos-nsantos/test", project.URL)

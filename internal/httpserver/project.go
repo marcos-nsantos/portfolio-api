@@ -51,14 +51,13 @@ func (s *Server) createProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getProject(w http.ResponseWriter, r *http.Request) {
-	idParam := chi.URLParam(r, "id")
-	idUint, err := strconv.ParseUint(idParam, 10, 64)
+	idParam, err := strconv.ParseUint(chi.URLParam(r, "id"), 10, 64)
 	if err != nil {
 		presenter.JSONErrorResponse(w, http.StatusBadRequest, errs.ErrInvalidID)
 		return
 	}
 
-	project, err := s.Project.GetByID(r.Context(), uint(idUint))
+	project, err := s.Project.GetByID(r.Context(), idParam)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			presenter.JSONErrorResponse(w, http.StatusNotFound, err)
@@ -84,8 +83,7 @@ func (s *Server) getAllProjects(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) updateProject(w http.ResponseWriter, r *http.Request) {
-	idParam := chi.URLParam(r, "id")
-	idUint, err := strconv.ParseUint(idParam, 10, 64)
+	idParam, err := strconv.ParseUint(chi.URLParam(r, "id"), 10, 64)
 	if err != nil {
 		presenter.JSONErrorResponse(w, http.StatusBadRequest, errs.ErrInvalidID)
 		return
@@ -103,7 +101,7 @@ func (s *Server) updateProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	toEntity := request.ToEntity()
-	toEntity.ID = uint(idUint)
+	toEntity.ID = idParam
 	if err := s.Project.Update(r.Context(), toEntity); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			presenter.JSONErrorResponse(w, http.StatusNotFound, err)
@@ -118,14 +116,13 @@ func (s *Server) updateProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) deleteProject(w http.ResponseWriter, r *http.Request) {
-	idParam := chi.URLParam(r, "id")
-	idUint, err := strconv.ParseUint(idParam, 10, 64)
+	idParam, err := strconv.ParseUint(chi.URLParam(r, "id"), 10, 64)
 	if err != nil {
 		presenter.JSONErrorResponse(w, http.StatusBadRequest, errs.ErrInvalidID)
 		return
 	}
 
-	if err := s.Project.Delete(r.Context(), uint(idUint)); err != nil {
+	if err := s.Project.Delete(r.Context(), idParam); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			presenter.JSONErrorResponse(w, http.StatusNotFound, err)
 			return

@@ -3,7 +3,7 @@ package presenter
 import "github.com/marcos-nsantos/portfolio-api/internal/entity"
 
 type ProjectPresenter struct {
-	ID          uint   `json:"id"`
+	ID          uint64 `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	URL         string `json:"url"`
