@@ -22,4 +22,6 @@ type Repository interface {
 	Reader
 }
 
-type Service interface{}
+type Service interface {
+	Create(ctx context.Context, user *entity.User) error
+}
