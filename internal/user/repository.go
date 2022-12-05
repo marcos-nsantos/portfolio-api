@@ -50,3 +50,7 @@ func (r *Repo) UpdatePassword(ctx context.Context, user *entity.User) error {
 		Select("password").
 		Updates(user).Error
 }
+
+func (r *Repo) Delete(ctx context.Context, id uint64) error {
+	return r.db.WithContext(ctx).Delete(&entity.User{}, id).Error
+}

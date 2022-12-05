@@ -1,3 +1,5 @@
+//go:build integration
+
 package user
 
 import (
@@ -94,4 +96,14 @@ func TestUpdatePassword(t *testing.T) {
 	user.Password = "new_password"
 	err = repo.UpdatePassword(context.Background(), user)
 	assert.NoError(t, err)
+}
+
+func TestDelete(t *testing.T) {
+	repo := NewRepo(db)
+	err := repo.Delete(context.Background(), 1)
+	assert.NoError(t, err)
+
+	user, err := repo.FindByID(context.Background(), 1)
+	assert.Error(t, err)
+	assert.Empty(t, user)
 }
