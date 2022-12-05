@@ -27,3 +27,12 @@ func (r *Repo) FindAll(ctx context.Context) ([]*entity.User, error) {
 		Order("id desc").Error
 	return users, err
 }
+
+func (r *Repo) FindByID(ctx context.Context, id uint64) (*entity.User, error) {
+	var user entity.User
+	err := r.db.WithContext(ctx).
+		Model(&entity.User{}).
+		Select("id", "first_name", "last_name", "email").
+		First(&user, id).Error
+	return &user, err
+}

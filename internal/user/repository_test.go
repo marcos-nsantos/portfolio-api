@@ -50,3 +50,13 @@ func TestFindAll(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, users)
 }
+
+func TestFindByID(t *testing.T) {
+	repo := NewRepo(db)
+	user, err := repo.FindByID(context.Background(), 1)
+	assert.NoError(t, err)
+	assert.Equal(t, uint(1), user.ID)
+	assert.Equal(t, "Marcos", user.FirstName)
+	assert.Equal(t, "Santos", user.LastName)
+	assert.Equal(t, "email@email.com", user.Email)
+}
