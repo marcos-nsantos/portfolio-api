@@ -36,20 +36,20 @@ func (rc *requestCreate) entity() *entity.Project {
 	}
 }
 
-type requests interface {
-	entity() *entity.Project
-}
-
-func convertToProjectEntity(request requests) *entity.Project {
-	return request.entity()
-}
-
 func (cr *requestUpdate) entity() *entity.Project {
 	return &entity.Project{
 		Name:        cr.Name,
 		Description: cr.Description,
 		URL:         cr.URL,
 	}
+}
+
+type requests interface {
+	entity() *entity.Project
+}
+
+func convertToProjectEntity(request requests) *entity.Project {
+	return request.entity()
 }
 
 func (s *Server) createProject(w http.ResponseWriter, r *http.Request) {
