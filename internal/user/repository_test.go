@@ -55,8 +55,27 @@ func TestFindByID(t *testing.T) {
 	repo := NewRepo(db)
 	user, err := repo.FindByID(context.Background(), 1)
 	assert.NoError(t, err)
-	assert.Equal(t, uint(1), user.ID)
+	assert.Equal(t, uint64(1), user.ID)
 	assert.Equal(t, "Marcos", user.FirstName)
 	assert.Equal(t, "Santos", user.LastName)
 	assert.Equal(t, "email@email.com", user.Email)
+}
+
+func TestUpdate(t *testing.T) {
+	user := &entity.User{
+		FirstName: "Marcos",
+		LastName:  "Santos",
+		Email:     "email@email.com",
+	}
+	repo := NewRepo(db)
+	err := repo.Insert(context.Background(), user)
+	assert.NoError(t, err)
+
+	user.Email = "user@email.com"
+	err = repo.Update(context.Background(), user)
+	assert.NoError(t, err)
+
+	user, err = repo.FindByID(context.Background(), user.ID)
+	assert.NoError(t, err)
+	assert.Equal(t, "user@email.com", user.Email)
 }

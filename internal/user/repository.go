@@ -36,3 +36,9 @@ func (r *Repo) FindByID(ctx context.Context, id uint64) (*entity.User, error) {
 		First(&user, id).Error
 	return &user, err
 }
+
+func (r *Repo) Update(ctx context.Context, user *entity.User) error {
+	return r.db.WithContext(ctx).
+		Select("first_name", "last_name", "email").
+		Updates(user).Error
+}
