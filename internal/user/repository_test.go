@@ -23,6 +23,9 @@ func TestMain(m *testing.M) {
 		fmt.Println(err)
 	}
 	code := m.Run()
+	if err := conn.DropTables(); err != nil {
+		fmt.Println(err)
+	}
 	os.Exit(code)
 }
 
@@ -39,4 +42,11 @@ func TestInsert(t *testing.T) {
 	assert.NotEmpty(t, user.ID)
 	assert.False(t, user.CreatedAt.IsZero())
 	assert.False(t, user.UpdatedAt.IsZero())
+}
+
+func TestFindAll(t *testing.T) {
+	repo := NewRepo(db)
+	users, err := repo.FindAll(context.Background())
+	assert.NoError(t, err)
+	assert.NotEmpty(t, users)
 }
