@@ -26,6 +26,9 @@ func TestMain(m *testing.M) {
 		fmt.Println(err)
 	}
 	code := m.Run()
+	if err := conn.DropTables(); err != nil {
+		fmt.Println(err)
+	}
 	os.Exit(code)
 }
 
