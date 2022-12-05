@@ -24,6 +24,7 @@ func TestCreate(t *testing.T) {
 	user := newFixture()
 	err := services.Create(context.Background(), user)
 	assert.NoError(t, err)
+	assert.NotEqualf(t, "password", user.Password, "password should be hashed")
 }
 
 func TestGetByID(t *testing.T) {
@@ -71,6 +72,7 @@ func TestUpdatePassword(t *testing.T) {
 	user.Password = "password2"
 	err = services.UpdatePassword(context.Background(), user)
 	assert.NoError(t, err)
+	assert.NotEqualf(t, "password2", user.Password, "password should be hashed")
 }
 
 func TestDelete(t *testing.T) {

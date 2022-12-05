@@ -14,6 +14,9 @@ func NewServices(repo Repository) *Services {
 }
 
 func (s *Services) Create(ctx context.Context, user *entity.User) error {
+	if err := user.HashPassword(); err != nil {
+		return err
+	}
 	return s.repo.Insert(ctx, user)
 }
 
@@ -34,6 +37,9 @@ func (s *Services) Update(ctx context.Context, user *entity.User) error {
 
 func (s *Services) UpdatePassword(ctx context.Context, user *entity.User) error {
 	if _, err := s.GetByID(ctx, user.ID); err != nil {
+		return err
+	}
+	if err := user.HashPassword(); err != nil {
 		return err
 	}
 	return s.repo.UpdatePassword(ctx, user)
