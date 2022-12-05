@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"github.com/marcos-nsantos/portfolio-api/internal/entity"
+	"gorm.io/gorm"
 )
 
 type inMemory struct {
@@ -40,8 +41,12 @@ func (i *inMemory) FindAll(ctx context.Context) ([]*entity.User, error) {
 }
 
 func (i *inMemory) FindByID(ctx context.Context, id uint64) (*entity.User, error) {
-	//TODO implement me
-	panic("implement me")
+	for _, user := range i.users {
+		if user.ID == id {
+			return user, nil
+		}
+	}
+	return nil, gorm.ErrRecordNotFound
 }
 
 func (i *inMemory) generateID() uint64 {
