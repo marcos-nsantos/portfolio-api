@@ -14,22 +14,46 @@ import (
 	"gorm.io/gorm"
 )
 
-type ProjectRequest struct {
+type requestCreate struct {
+	Name        string `json:"name" validate:"required,notblank,max=100"`
+	Description string `json:"description" validate:"required,notblank,max=255"`
+	URL         string `json:"url" validate:"required,url,max=255"`
+	UserID      uint64 `json:"user_id" validate:"required"`
+}
+
+type requestUpdate struct {
 	Name        string `json:"name" validate:"required,notblank,max=100"`
 	Description string `json:"description" validate:"required,notblank,max=255"`
 	URL         string `json:"url" validate:"required,url,max=255"`
 }
 
-func (p *ProjectRequest) ToEntity() *entity.Project {
+func (rc *requestCreate) entity() *entity.Project {
 	return &entity.Project{
-		Name:        p.Name,
-		Description: p.Description,
-		URL:         p.URL,
+		Name:        rc.Name,
+		Description: rc.Description,
+		URL:         rc.URL,
+		UserID:      rc.UserID,
+	}
+}
+
+type requests interface {
+	entity() *entity.Project
+}
+
+func convertToProjectEntity(request requests) *entity.Project {
+	return request.entity()
+}
+
+func (cr *requestUpdate) entity() *entity.Project {
+	return &entity.Project{
+		Name:        cr.Name,
+		Description: cr.Description,
+		URL:         cr.URL,
 	}
 }
 
 func (s *Server) createProject(w http.ResponseWriter, r *http.Request) {
-	var request ProjectRequest
+	var request requestCreate
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		presenter.JSONErrorResponse(w, http.StatusBadRequest, errs.ErrInvalidBodyRequest)
 		return
@@ -40,13 +64,13 @@ func (s *Server) createProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	toEntity := request.ToEntity()
-	if err := s.Project.Create(r.Context(), toEntity); err != nil {
+	project := convertToProjectEntity(&request)
+	if err := s.Project.Create(r.Context(), project); err != nil {
 		presenter.JSONInternalServerError(w, err)
 		return
 	}
 
-	projectPresenter := presenter.NewProjectPresenter(toEntity)
+	projectPresenter := presenter.NewProjectPresenter(project)
 	presenter.JSONResponse(w, http.StatusCreated, projectPresenter)
 }
 
@@ -89,7 +113,7 @@ func (s *Server) updateProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var request ProjectRequest
+	var request requestUpdate
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		presenter.JSONErrorResponse(w, http.StatusBadRequest, errs.ErrInvalidBodyRequest)
 		return
@@ -100,9 +124,9 @@ func (s *Server) updateProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	toEntity := request.ToEntity()
-	toEntity.ID = idParam
-	if err := s.Project.Update(r.Context(), toEntity); err != nil {
+	project := convertToProjectEntity(&request)
+	project.ID = idParam
+	if err := s.Project.Update(r.Context(), project); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			presenter.JSONErrorResponse(w, http.StatusNotFound, err)
 			return
@@ -111,7 +135,7 @@ func (s *Server) updateProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	projectPresenter := presenter.NewProjectPresenter(toEntity)
+	projectPresenter := presenter.NewProjectPresenter(project)
 	presenter.JSONResponse(w, http.StatusOK, projectPresenter)
 }
 
