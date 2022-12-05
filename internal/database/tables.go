@@ -8,3 +8,9 @@ func (c *Connection) CreateTables() error {
 		&entity.User{},
 	)
 }
+
+func (c *Connection) DropTables() error {
+	return c.Client.Migrator().DropTable(
+		&entity.Project{}, &entity.User{},
+	)
+}
