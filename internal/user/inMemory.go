@@ -31,8 +31,13 @@ func (i *inMemory) Update(ctx context.Context, user *entity.User) error {
 }
 
 func (i *inMemory) UpdatePassword(ctx context.Context, user *entity.User) error {
-	//TODO implement me
-	panic("implement me")
+	for index, u := range i.users {
+		if u.ID == user.ID {
+			i.users[index].Password = user.Password
+			return nil
+		}
+	}
+	return nil
 }
 
 func (i *inMemory) Delete(ctx context.Context, id uint64) error {

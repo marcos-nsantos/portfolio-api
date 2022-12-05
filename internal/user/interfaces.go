@@ -27,4 +27,5 @@ type Service interface {
 	GetByID(ctx context.Context, id uint64) (*entity.User, error)
 	GetAll(ctx context.Context) ([]*entity.User, error)
 	Update(ctx context.Context, user *entity.User) error
+	UpdatePassword(ctx context.Context, user *entity.User) error
 }

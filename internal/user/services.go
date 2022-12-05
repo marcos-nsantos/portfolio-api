@@ -31,3 +31,10 @@ func (s *Services) Update(ctx context.Context, user *entity.User) error {
 	}
 	return s.repo.Update(ctx, user)
 }
+
+func (s *Services) UpdatePassword(ctx context.Context, user *entity.User) error {
+	if _, err := s.GetByID(ctx, user.ID); err != nil {
+		return err
+	}
+	return s.repo.UpdatePassword(ctx, user)
+}

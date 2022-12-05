@@ -61,3 +61,14 @@ func TestUpdate(t *testing.T) {
 	err = services.Update(context.Background(), user)
 	assert.NoError(t, err)
 }
+
+func TestUpdatePassword(t *testing.T) {
+	repo := newInMemory()
+	services := NewServices(repo)
+	user := newFixture()
+	err := services.Create(context.Background(), user)
+	assert.NoError(t, err)
+	user.Password = "password2"
+	err = services.UpdatePassword(context.Background(), user)
+	assert.NoError(t, err)
+}
