@@ -28,4 +28,5 @@ type Service interface {
 	GetAll(ctx context.Context) ([]*entity.User, error)
 	Update(ctx context.Context, user *entity.User) error
 	UpdatePassword(ctx context.Context, user *entity.User) error
+	Delete(ctx context.Context, id uint64) error
 }

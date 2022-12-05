@@ -38,3 +38,10 @@ func (s *Services) UpdatePassword(ctx context.Context, user *entity.User) error 
 	}
 	return s.repo.UpdatePassword(ctx, user)
 }
+
+func (s *Services) Delete(ctx context.Context, id uint64) error {
+	if _, err := s.GetByID(ctx, id); err != nil {
+		return err
+	}
+	return s.repo.Delete(ctx, id)
+}
