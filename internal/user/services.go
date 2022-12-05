@@ -24,3 +24,10 @@ func (s *Services) GetByID(ctx context.Context, id uint64) (*entity.User, error)
 func (s *Services) GetAll(ctx context.Context) ([]*entity.User, error) {
 	return s.repo.FindAll(ctx)
 }
+
+func (s *Services) Update(ctx context.Context, user *entity.User) error {
+	if _, err := s.GetByID(ctx, user.ID); err != nil {
+		return err
+	}
+	return s.repo.Update(ctx, user)
+}

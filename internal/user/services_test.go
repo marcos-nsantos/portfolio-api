@@ -50,3 +50,14 @@ func TestGetAll(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Len(t, users, 1)
 }
+
+func TestUpdate(t *testing.T) {
+	repo := newInMemory()
+	services := NewServices(repo)
+	user := newFixture()
+	err := services.Create(context.Background(), user)
+	assert.NoError(t, err)
+	user.FirstName = "Marcos2"
+	err = services.Update(context.Background(), user)
+	assert.NoError(t, err)
+}
