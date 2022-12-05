@@ -5,6 +5,7 @@ package project
 import (
 	"context"
 	"fmt"
+	"github.com/marcos-nsantos/portfolio-api/internal/user"
 	"os"
 	"testing"
 
@@ -33,13 +34,24 @@ func TestMain(m *testing.M) {
 }
 
 func TestInsert(t *testing.T) {
+	userEntity := &entity.User{
+		FirstName: "Marcos",
+		LastName:  "Santos",
+		Email:     "email@email.com",
+		Password:  "password",
+	}
+	useRepo := user.NewRepo(db)
+	err := useRepo.Insert(context.Background(), userEntity)
+	assert.NoError(t, err)
+
 	project := &entity.Project{
 		Name:        "Test",
 		Description: "Test",
 		URL:         "https://github.com/marcos-nsantos/test",
+		UserID:      userEntity.ID,
 	}
 	repo := NewRepo(db)
-	err := repo.Insert(context.Background(), project)
+	err = repo.Insert(context.Background(), project)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, project.ID)
 	assert.NotEmpty(t, project.CreatedAt)
@@ -61,8 +73,6 @@ func TestFindByID(t *testing.T) {
 	assert.Equal(t, "Test", project.Name)
 	assert.Equal(t, "Test", project.Description)
 	assert.Equal(t, "https://github.com/marcos-nsantos/test", project.URL)
-	assert.NotEmpty(t, project.CreatedAt)
-	assert.NotEmpty(t, project.UpdatedAt)
 }
 
 func TestUpdate(t *testing.T) {
