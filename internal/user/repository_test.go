@@ -79,3 +79,19 @@ func TestUpdate(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, "user@email.com", user.Email)
 }
+
+func TestUpdatePassword(t *testing.T) {
+	user := &entity.User{
+		FirstName: "Marcos",
+		LastName:  "Santos",
+		Email:     "email@email.com",
+		Password:  "password",
+	}
+	repo := NewRepo(db)
+	err := repo.Insert(context.Background(), user)
+	assert.NoError(t, err)
+
+	user.Password = "new_password"
+	err = repo.UpdatePassword(context.Background(), user)
+	assert.NoError(t, err)
+}
